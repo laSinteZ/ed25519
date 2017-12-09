@@ -13,7 +13,7 @@ Originally Ed25519 consists of three *modules*:
 - random number generator, to generate keypairs
 
 This repository offers at least two different C implementations for every module. 
-Every implementation is tested and can be replaced with other at link-time.
+Every implementation is tested against test cases from standards (more in test sources) and can be replaced with other at link-time.
 New implementations can be added as well.
 
 During CMake time, users are able to choose any of these implementations using cmake definitions:
@@ -21,7 +21,7 @@ During CMake time, users are able to choose any of these implementations using c
 - `EDIMPL`
     - `ref10` - portable C implementation. 
     - `amd64-64-24k` - optimized C and ASM implementation, works only on Linux amd64. 
-    - `amd64-64-24k-pic` - same as `amd64-64-24k`, but has fixes in ASM files, to allow *process independent code* (`-fPIC`) builds. 
+    - `amd64-64-24k-pic` - same as `amd64-64-24k`, but has fixes in ASM files, to allow *position independent code* (`-fPIC`) builds. 
 - `HASH`
     - `sha2_openssl` 
     - `sha3_brainhub` - default

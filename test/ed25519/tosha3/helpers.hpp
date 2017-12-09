@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include "ed25519.h"
-#include "hexutil.hpp"
+#include "test/hexutil.hpp"
 
 // hexencoded data
 struct TestCase {

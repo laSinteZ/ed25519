@@ -12,8 +12,11 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 SET(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 
-option(TESTING         "Enable testing"      ON)
-option(COVERAGE        "Enable coverage"     ON)
+option(TESTING       "Enable testing"       ON)
+option(COVERAGE      "Enable coverage"      ON)
+option(FUZZING       "Enable fuzzing"       OFF)
+option(BENCHMARKING  "Enable benchmarking"  ON)
+
 
 if(COVERAGE)
   include(cmake/coverage.cmake)
@@ -60,11 +63,12 @@ ENUM(BUILD "${BUILD}" "library build type"
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(lib)
-add_subdirectory(benchmark)
 
 
-set(SOVERSION "1.1.0")
+
+set(SOVERSION "1.2.0")
 set(LIBED25519_VERSION "${SOVERSION}-${EDIMPL}-${HASH}-${RANDOM}")
 
 
@@ -74,7 +78,7 @@ add_library(ed25519 ${BUILD}
 target_compile_definitions(ed25519 PUBLIC
     -DLIBED25519_VERSION=${LIBED25519_VERSION}
     )
-target_link_libraries(ed25519
+target_link_libraries(ed25519 PUBLIC
     ${EDLIB}
     ${HASH}
     ${RANDOM}
@@ -104,3 +108,10 @@ set_target_properties(${EDIMPL} PROPERTIES EXCLUDE_FROM_ALL FALSE)
 set_target_properties(${HASH}   PROPERTIES EXCLUDE_FROM_ALL FALSE)
 set_target_properties(${RANDOM} PROPERTIES EXCLUDE_FROM_ALL FALSE)
 
+if(FUZZING)
+  add_subdirectory(fuzz)
+endif()
+
+if(BENCHMARKING)
+  add_subdirectory(benchmark)
+endif()
